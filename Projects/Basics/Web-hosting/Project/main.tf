@@ -26,8 +26,8 @@ resource "aws_s3_bucket_ownership_controls" "s3-owner-proj-block" {
   bucket = aws_s3_bucket.s3.id
 
   rule {
-    object_ownership = "BucketOwnerPreferred"
-    # object_ownership = "BucketOwnerEnforced"
+    object_ownership = "ObjectWriter"
+
     }
 }
 
