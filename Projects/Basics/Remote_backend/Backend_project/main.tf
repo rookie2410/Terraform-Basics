@@ -10,3 +10,4 @@ resource "aws_instance" "roshan" {
   ami           = var.ami_id
   subnet_id     = var.subnet_id
 }
+
