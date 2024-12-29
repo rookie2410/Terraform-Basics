@@ -1,7 +1,7 @@
-variable "region"{
+variable "region" {
   description = "The AWS region to deploy to"
   default     = "us-east-1"
-  
+
 }
 
 variable "ownership_control" {
@@ -22,4 +22,18 @@ variable "object_configurations" {
 variable "index_document" {
   description = "The index document for the bucket"
   default     = "index.html"
+}
+
+
+variable "access_key" {
+  description = "This is the access key for aws"
+}
+
+variable "secret_key" {
+  description = "This is the secret key for aws"
+}
+
+variable "bucket_name" {
+  description = "This is the name of the bucket"
+
 }
