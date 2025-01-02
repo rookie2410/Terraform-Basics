@@ -39,3 +39,7 @@ terraform.rc
 
 # Ignore lock files
 .terraform.tfstate.lock.hcl
+
+
+#Ignore pem file
+.pem
