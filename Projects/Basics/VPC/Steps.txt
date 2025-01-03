@@ -1,0 +1,16 @@
+### Step-by-Step Plan to Create a Terraform Project
+
+1. Select the AWS Region  
+2. Create a VPC  
+3. Enable DNS Hostnames and Support  
+4. Create an Internet Gateway  
+5. Attach Internet Gateway to the VPC  
+6. Create Public and Private Subnets  
+7. Create Route Tables  
+8. Deploy NAT Gateway  
+9. Associate Subnets with Route Tables  
+10. Create Security Groups  
+11. Deploy Load Balancer  
+12. Deploy Application Instances  
+13. Output Key Information  
+14. Validate and Apply Terraform Configuration  
