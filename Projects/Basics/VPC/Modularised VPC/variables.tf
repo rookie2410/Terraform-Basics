@@ -13,11 +13,11 @@ variable "region" {
 }
 variable "cidr_block" {
   description = "The CIDR block for the VPC"
-  type        = string  
+  type        = string
 }
 
 variable "subnet_cidr_blocks" {
   description = "The CIDR blocks for the subnets"
   type        = list(string)
-  
+
 }
