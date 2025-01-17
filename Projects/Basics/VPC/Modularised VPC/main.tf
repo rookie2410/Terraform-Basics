@@ -2,30 +2,31 @@
 module "my_vpc" {
   source             = "./modules/VPC"
   cidr_block         = var.cidr_block
-  subnet_cidr_blocks = var.subnet_cidr_blocks
+  public_subnet_cidr_blocks = var.public_subnet_cidr_blocks
+  private_subnet_cidr_blocks = var.private_subnet_cidr_blocks
 
 }
 
-module "security_group" {
-  source = "./modules/security_group"
-  vpc_id = module.my_vpc.vpc_id
+# module "security_group" {
+#   source = "./modules/security_group"
+#   vpc_id = module.my_vpc.vpc_id
 
-}
+# }
 
 
-module "ec2" {
-  source     = "./modules/ec2"
-  sg_id      = module.security_group.sg_id
-  subnet_ids = module.my_vpc.subnet_ids
-}
+# module "ec2" {
+#   source     = "./modules/ec2"
+#   sg_id      = module.security_group.sg_id
+#   subnet_ids = module.my_vpc.subnet_ids
+# }
 
-module "alb" {
-  source    = "./modules/load_balancer"
-  instances = module.ec2.aws_instance_ids
-  sg_id     = module.security_group.sg_id
-  vpc_id    = module.my_vpc.vpc_id
-  subnets   = module.my_vpc.subnet_ids
-}
+# module "alb" {
+#   source    = "./modules/load_balancer"
+#   instances = module.ec2.aws_instance_ids
+#   sg_id     = module.security_group.sg_id
+#   vpc_id    = module.my_vpc.vpc_id
+#   subnets   = module.my_vpc.subnet_ids
+# }
 
 
 # resource "aws_internet_gateway" "aws-prod-gateway" {
