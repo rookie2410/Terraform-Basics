@@ -1,7 +1,7 @@
 
 module "my_vpc" {
-  source = "./modules/VPC"
-  cidr_block = var.cidr_block
+  source             = "./modules/VPC"
+  cidr_block         = var.cidr_block
   subnet_cidr_blocks = var.subnet_cidr_blocks
 
 }
@@ -9,22 +9,22 @@ module "my_vpc" {
 module "security_group" {
   source = "./modules/security_group"
   vpc_id = module.my_vpc.vpc_id
-  
+
 }
 
 
 module "ec2" {
-  source = "./modules/ec2"
-  sg_id = module.security_group.sg_id
+  source     = "./modules/ec2"
+  sg_id      = module.security_group.sg_id
   subnet_ids = module.my_vpc.subnet_ids
 }
 
 module "alb" {
-  source = "./modules/load_balancer"
+  source    = "./modules/load_balancer"
   instances = module.ec2.aws_instance_ids
-  sg_id = module.security_group.sg_id
-  vpc_id = module.my_vpc.vpc_id
-  subnets = module.my_vpc.subnet_ids
+  sg_id     = module.security_group.sg_id
+  vpc_id    = module.my_vpc.vpc_id
+  subnets   = module.my_vpc.subnet_ids
 }
 
 
