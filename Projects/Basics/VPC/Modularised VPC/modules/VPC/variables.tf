@@ -33,3 +33,4 @@ variable "private_rt_name" {
   default     = ["private-rt-1a", "private-rt-1b"]
   
 }
+
