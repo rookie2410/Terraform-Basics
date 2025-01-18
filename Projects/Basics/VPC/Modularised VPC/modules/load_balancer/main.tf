@@ -38,11 +38,11 @@ resource "aws_lb_target_group" "aws-prod-tg" {
   
 }
 
-#Target Group Attachment
-resource "aws_lb_target_group_attachment" "aws-prod-tg-attachment" {
-    count = length(var.instances)
-    target_group_arn = aws_lb_target_group.aws-prod-tg.arn
-    target_id = var.instances[count.index]
-    port = 80
+# #Target Group Attachment
+# resource "aws_lb_target_group_attachment" "aws-prod-tg-attachment" {
+#     count = length(var.instances)
+#     target_group_arn = aws_lb_target_group.aws-prod-tg.arn
+#     target_id = var.instances[count.index]
+#     port = 80
   
-}
+# }
