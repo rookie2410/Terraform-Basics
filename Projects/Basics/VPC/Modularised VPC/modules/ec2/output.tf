@@ -1,4 +1,4 @@
-output "aws_instance_ids" {
-  value = aws_instance.aws-prod-instance[*].id
+output "aws_launch_template_id" {
+  value = aws_launch_template.aws-prod-ec2.id
   
 }
