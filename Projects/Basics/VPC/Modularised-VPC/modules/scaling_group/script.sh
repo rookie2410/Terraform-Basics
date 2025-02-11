@@ -1,13 +1,4 @@
-resource "aws_instance" "aws-prod-instance" {
-  count = length(var.ec2_names)
-  ami=data.aws_ami.amazon-2.id
-  instance_type = "t2.micro"
-  vpc_security_group_ids = [var.sg_id]
-  subnet_id = var.subnet_ids[count.index]
-  availability_zone = data.aws_availability_zones.available.names[count.index]
-
-  user_data = <<EOF
-  #!/bin/bash
+!/bin/bash
     sudo yum update -y
     sudo yum install -y httpd
     sudo yum install -y git
@@ -107,10 +98,3 @@ resource "aws_instance" "aws-prod-instance" {
     echo "</body>" >> index.html
     echo "</html>" >> index.html
     sudo service httpd start
-  EOF
-
-  tags = {
-    Name = var.ec2_names[count.index]
-  }
-  
-}

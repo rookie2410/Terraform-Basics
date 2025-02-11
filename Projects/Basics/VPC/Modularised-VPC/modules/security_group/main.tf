@@ -12,6 +12,14 @@ resource "aws_security_group" "aws-prod-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "Allow Custom TCP inbound traffic"
+    from_port = 8000
+    to_port = 8000
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
    ingress {
     description = "Allow SSH inbound traffic"
     from_port = 22

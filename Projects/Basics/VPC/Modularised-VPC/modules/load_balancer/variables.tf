@@ -13,7 +13,3 @@ variable "vpc_id" {
     type = string
 }
 
-variable "instances" {
-  description = "Instance ID for Target Group Attachment"
-  type = list(string)
-}
