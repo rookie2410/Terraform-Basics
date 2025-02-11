@@ -115,12 +115,17 @@
   
 # }
 
+resource "aws_key_pair" "proj_key" {
+  key_name = "Proj-key"
+  public_key = file("/home/dev/key-proj.pub")
+  
+}
 
 resource "aws_launch_template" "aws-prod-ec2" {
   name = "aws-prod-exam-ec2"
   image_id = "ami-0e2c8caa4b6378d8c"
   instance_type = "t2.micro"
-  # key_name = "aws-prod-exam-key"
+  key_name = aws_key_pair.proj_key.key_name
   
   tag_specifications {
     resource_type = "instance"
@@ -130,4 +135,44 @@ resource "aws_launch_template" "aws-prod-ec2" {
   } 
 }
 
+resource "aws_instance" "public_bastion" {
+  ami = "ami-0e2c8caa4b6378d8c"
+  instance_type = "t2.micro"
+  security_groups = [ var.sg_id]
+  subnet_id = var.subnet_id
+  associate_public_ip_address = true
+  tags = {
+    Name = "aws-prod-exam-bastion"
+  }
+  
+}
+
+resource "null_resource" "file_provisioner" {
+ 
+  connection {
+    type     = "ssh"
+    user     = "root"
+    private_key = file("/home/dev/proj-key/id_rsa")
+    host     = aws_instance.public_bastion.public_ip
+  }
+
+  provisioner "file" {
+    source = "D:/Roshan/Terraform/Terraform-Basics/Projects/Basics/VPC/Modularised VPC/index.html"
+    destination = "/home/ubuntu/"
+  }
+
+  provisioner "file" {
+    source = "/home/dev/proj-key/id_rsa.pub"
+    destination = "/home/ubuntu/"
+  }
+
+  
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update -y",
+      "python3 -m http.server 80",
+    ]
+  }
+  
+}
 

@@ -1,8 +1,8 @@
 
 module "my_vpc" {
-  source             = "./modules/VPC"
-  cidr_block         = var.cidr_block
-  public_subnet_cidr_blocks = var.public_subnet_cidr_blocks
+  source                     = "./modules/VPC"
+  cidr_block                 = var.cidr_block
+  public_subnet_cidr_blocks  = var.public_subnet_cidr_blocks
   private_subnet_cidr_blocks = var.private_subnet_cidr_blocks
 
 }
@@ -11,31 +11,31 @@ module "my_vpc" {
 module "security_group" {
   source = "./modules/security_group"
   vpc_id = module.my_vpc.vpc_id
-  
+
 }
 
 
 module "ec2" {
-  source = "./modules/ec2"
-  sg_id = module.security_group.sg_id
-  subnet_ids = module.my_vpc.public_subnet_ids
+  source    = "./modules/ec2"
+  sg_id     = module.security_group.sg_id
+  subnet_id = module.my_vpc.public_subnet_id
 }
 
 module "load_balancer" {
-  source = "./modules/load_balancer"
-  sg_id = module.security_group.sg_id
-  vpc_id = module.my_vpc.vpc_id
+  source  = "./modules/load_balancer"
+  sg_id   = module.security_group.sg_id
+  vpc_id  = module.my_vpc.vpc_id
   subnets = module.my_vpc.public_subnet_ids
-    
+
 }
 
 module "scaling_group" {
-  source = "./modules/scaling_group"
-  aws_lb_listener_arn= module.load_balancer.aws_lb_listener_arn
-  private_subnet_ids = module.my_vpc.private_subnet_ids
+  source                 = "./modules/scaling_group"
+  aws_lb_listener_arn    = module.load_balancer.aws_lb_listener_arn
+  private_subnet_ids     = module.my_vpc.private_subnet_ids
   aws_launch_template_id = module.ec2.aws_launch_template_id
-  target_group_arn = module.load_balancer.aws_lb_target_group_arn
-  
+  target_group_arn       = module.load_balancer.aws_lb_target_group_arn
+
 }
 
 
