@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - 'main'
-      - 'modules'
+
 
 env:
   AWS_ACTION_KEY: ${{ secrets.ACCESS_KEY}}
