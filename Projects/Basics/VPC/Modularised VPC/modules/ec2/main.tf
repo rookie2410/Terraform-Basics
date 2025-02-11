@@ -147,6 +147,7 @@ resource "aws_instance" "public_bastion" {
   
 }
 
+#To be worked on (learning included)
 resource "null_resource" "file_provisioner" {
  
   connection {
