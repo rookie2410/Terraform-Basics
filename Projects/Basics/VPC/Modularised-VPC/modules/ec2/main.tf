@@ -1,131 +1,15 @@
-# resource "aws_instance" "aws-prod-instance" {
-#   count = length(var.ec2_names)
-#   ami=data.aws_ami.amazon-2.id
-#   instance_type = "t2.micro"
-#   vpc_security_group_ids = [var.sg_id]
-#   subnet_id = var.subnet_ids[count.index]
-#   availability_zone = data.aws_availability_zones.available.names[count.index]
+resource "aws_key_pair" "server_test_key" {
+  key_name   = "server_key_name"
+  # public_key = file("~/.ssh/terraform.pub")
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCzeH1WBl48kpL/b9/TbsqAtlVN7rRL6dRyBdQ0NMFgGi4g3gl5QzJ/vtZmBlTBHND9endltFkYczrcRL1X53hgkb+qqvGWzn9LSeobto1V98nerJEc+cXKqBzHEj6juzYcCZmDzr0pTbfNUJAhIcAI5vTBzj2BTEXGhW+oJlb5oqhJW2QRllhpb0gHCuVy4iI7CS2PLwtNrTdyasZJ4GcWUk+zcP0VpJx3Vr1IkTZ3oxDdnD4+2kyBfUW3C/oilcIywQ/eyS5J59jL6ZvzLefPsIvcWiDQje8Zsd2UM5TGMXCgbUvtmB2r2exgc+aMU+BE0AH//x8zfFjKFZS6YS/P1C5nWHNmPF3ISGeOpq/E0GE9coB5AHOUfbQrM7Y825b7vsAXboOHoLU3twmtNVV+fVUFMT1i4dw8+L23UuBBVCtUfj4Ew301kiRL1vChRz7TWUtYcaDhjHCTUhiLYxpIzwakjLXU0XHCCQlIOow4MtKAreqjU26FsjFjOdUSCfs= dev@Oblivion"
 
-#   user_data = <<EOF
-#   #!/bin/bash
-#     sudo yum update -y
-#     sudo yum install -y httpd
-#     sudo yum install -y git
-#     export META_INST_ID=`curl http://169.254.169.254/latest/meta-data/instance-id`
-#     export META_INST_TYPE=`curl http://169.254.169.254/latest/meta-data/instance-type`
-#     export META_INST_AZ=`curl http://169.254.169.254/latest/meta-data/placement/availability-zone`
-#     cd /var/www/html
-#     echo "<!DOCTYPE html>" >> index.html
-#     echo "<html lang="en">" >> index.html
-#     echo "<head>" >> index.html
-#     echo "    <meta charset="UTF-8">" >> index.html
-#     echo "    <meta name="viewport" content="width=device-width, initial-scale=1.0">" >> index.html
-#     echo "    <style>" >> index.html
-#     echo "        @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');" >> index.html
-#     echo "        html {" >> index.html
-#     echo "            position: relative;" >> index.html
-#     echo "            overflow-x: hidden !important;" >> index.html
-#     echo "        }" >> index.html
-#     echo "        * {" >> index.html
-#     echo "            box-sizing: border-box;" >> index.html
-#     echo "        }" >> index.html
-#     echo "        body {" >> index.html
-#     echo "            font-family: 'Open Sans', sans-serif;" >> index.html
-#     echo "            color: #324e63;" >> index.html
-#     echo "        }" >> index.html
-#     echo "        .wrapper {" >> index.html
-#     echo "            width: 100%;" >> index.html
-#     echo "            width: 100%;" >> index.html
-#     echo "            height: auto;" >> index.html
-#     echo "            min-height: 90vh;" >> index.html
-#     echo "            padding: 50px 20px;" >> index.html
-#     echo "            padding-top: 100px;" >> index.html
-#     echo "            display: flex;" >> index.html
-#     echo "        }" >> index.html
-#     echo "        .instance-card {" >> index.html
-#     echo "            width: 100%;" >> index.html
-#     echo "            min-height: 380px;" >> index.html
-#     echo "            margin: auto;" >> index.html
-#     echo "            box-shadow: 12px 12px 2px 1px rgba(13, 28, 39, 0.4);" >> index.html
-#     echo "            background: #fff;" >> index.html
-#     echo "            border-radius: 15px;" >> index.html
-#     echo "            border-width: 1px;" >> index.html
-#     echo "            max-width: 500px;" >> index.html
-#     echo "            position: relative;" >> index.html
-#     echo "            border: thin groove #9c83ff;" >> index.html
-#     echo "        }" >> index.html
-#     echo "        .instance-card__cnt {" >> index.html
-#     echo "            margin-top: 35px;" >> index.html
-#     echo "            text-align: center;" >> index.html
-#     echo "            padding: 0 20px;" >> index.html
-#     echo "            padding-bottom: 40px;" >> index.html
-#     echo "            transition: all .3s;" >> index.html
-#     echo "        }" >> index.html
-#     echo "        .instance-card__name {" >> index.html
-#     echo "            font-weight: 700;" >> index.html
-#     echo "            font-size: 24px;" >> index.html
-#     echo "            color: #6944ff;" >> index.html
-#     echo "            margin-bottom: 15px;" >> index.html
-#     echo "        }" >> index.html
-#     echo "        .instance-card-inf__item {" >> index.html
-#     echo "            padding: 10px 35px;" >> index.html
-#     echo "            min-width: 150px;" >> index.html
-#     echo "        }" >> index.html
-#     echo "        .instance-card-inf__title {" >> index.html
-#     echo "            font-weight: 700;" >> index.html
-#     echo "            font-size: 27px;" >> index.html
-#     echo "            color: #324e63;" >> index.html
-#     echo "        }" >> index.html
-#     echo "        .instance-card-inf__txt {" >> index.html
-#     echo "            font-weight: 500;" >> index.html
-#     echo "            margin-top: 7px;" >> index.html
-#     echo "        }" >> index.html
-#     echo "    </style>" >> index.html
-#     echo "    <title>Amazon EC2 Status</title>" >> index.html
-#     echo "</head>" >> index.html
-#     echo "<body>" >> index.html
-#     echo "    <div class="wrapper">" >> index.html
-#     echo "        <div class="instance-card">" >> index.html
-#     echo "            <div class="instance-card__cnt">" >> index.html
-#     echo "                <div class="instance-card__name">Your EC2 Instance is running!</div>" >> index.html
-#     echo "                <div class="instance-card-inf">" >> index.html
-#     echo "                    <div class="instance-card-inf__item">" >> index.html
-#     echo "                        <div class="instance-card-inf__txt">Instance Id</div>" >> index.html
-#     echo "                        <div class="instance-card-inf__title">" $META_INST_ID "</div>" >> index.html
-#     echo "                    </div>" >> index.html
-#     echo "                    <div class="instance-card-inf__item">" >> index.html
-#     echo "                        <div class="instance-card-inf__txt">Instance Type</div>" >> index.html
-#     echo "                        <div class="instance-card-inf__title">" $META_INST_TYPE "</div>" >> index.html
-#     echo "                    </div>" >> index.html
-#     echo "                    <div class="instance-card-inf__item">" >> index.html
-#     echo "                        <div class="instance-card-inf__txt">Availability zone</div>" >> index.html
-#     echo "                        <div class="instance-card-inf__title">" $META_INST_AZ "</div>" >> index.html
-#     echo "                    </div>" >> index.html
-#     echo "                </div>" >> index.html
-#     echo "            </div>" >> index.html
-#     echo "        </div>" >> index.html
-#     echo "</body>" >> index.html
-#     echo "</html>" >> index.html
-#     sudo service httpd start
-#   EOF
-
-#   tags = {
-#     Name = var.ec2_names[count.index]
-#   }
-  
-# }
-
-resource "aws_key_pair" "proj_key" {
-  key_name = "Proj-key"
-  public_key = file("/home/dev/key-proj.pub")
-  
 }
 
 resource "aws_launch_template" "aws-prod-ec2" {
   name = "aws-prod-exam-ec2"
   image_id = "ami-0e2c8caa4b6378d8c"
   instance_type = "t2.micro"
-  key_name = aws_key_pair.proj_key.key_name
+  key_name        = aws_key_pair.server_test_key.key_name
   
   tag_specifications {
     resource_type = "instance"
@@ -141,6 +25,7 @@ resource "aws_instance" "public_bastion" {
   security_groups = [ var.sg_id]
   subnet_id = var.subnet_id
   associate_public_ip_address = true
+  key_name        = aws_key_pair.server_test_key.key_name
   tags = {
     Name = "aws-prod-exam-bastion"
   }
@@ -151,27 +36,29 @@ resource "aws_instance" "public_bastion" {
 resource "null_resource" "file_provisioner" {
  
   connection {
-    type     = "ssh"
-    user     = "root"
-    private_key = file("/home/dev/proj-key/id_rsa")
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = file("~/.ssh/terraform")
     host     = aws_instance.public_bastion.public_ip
   }
 
   provisioner "file" {
-    source = "D:/Roshan/Terraform/Terraform-Basics/Projects/Basics/VPC/Modularised VPC/index.html"
-    destination = "/home/ubuntu/"
+    source = "./index.html"
+    destination = "/home/ubuntu/index.html"
   }
 
   provisioner "file" {
-    source = "/home/dev/proj-key/id_rsa.pub"
-    destination = "/home/ubuntu/"
+    source = "~/.ssh/terraform"
+    destination = "/home/terraform"
   }
 
   
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update -y",
-      "python3 -m http.server 80",
+      "cd /home/ubuntu/",
+      "sleep 20",
+      "python3 -m http.server 8000",
     ]
   }
   
